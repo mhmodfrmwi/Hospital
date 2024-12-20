@@ -10,6 +10,9 @@
     "preview": "vite preview",
     "server": "json-server --watch data/students.json --port 5000"
   },
+  "engines": {
+    "node": "16.x"
+  },
   "dependencies": {
     "@fortawesome/free-brands-svg-icons": "^6.7.1",
     "@fortawesome/free-regular-svg-icons": "^6.7.1",
