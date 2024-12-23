@@ -1,15 +1,14 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchDoctors } from "@/rtk/slices/doctorsSlice"; // assuming the fetchDoctors action is created in doctorsSlice
+import { fetchDoctors } from "@/rtk/slices/doctorsSlice";
 import DoctorCard from "./DoctorCard";
+import { Link } from "react-router-dom";
 
 const DoctorsToBook = () => {
   const dispatch = useDispatch();
 
-  // Select the doctors state from the Redux store
   const { doctors, loading, error } = useSelector((state) => state.doctors);
 
-  // Dispatch the fetchDoctors action on component mount
   useEffect(() => {
     dispatch(fetchDoctors());
   }, [dispatch]);
@@ -25,7 +24,6 @@ const DoctorsToBook = () => {
         </p>
       </div>
 
-      {/* Show loading indicator while data is being fetched */}
       {loading ? (
         <div className="text-center text-lg text-gray-600">
           Loading doctors...
@@ -35,13 +33,15 @@ const DoctorsToBook = () => {
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {doctors.map((doctor) => (
-            <DoctorCard
-              key={doctor.id}
-              image={doctor.image}
-              isAvailable={doctor.isAvailable}
-              name={doctor.name}
-              apartment={doctor.specialty}
-            />
+            <Link key={doctor.id} to={`/${doctor.id}`}>
+              <DoctorCard
+                image={doctor.image.url}
+                isAvailable={doctor.availability.length > 2 ? true : false}
+                name={doctor.name}
+                apartment={doctor.specialization}
+                experience={doctor.experience}
+              />
+            </Link>
           ))}
         </div>
       )}

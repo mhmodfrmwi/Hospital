@@ -27,14 +27,15 @@ const AllDoctors = () => {
           No doctors available at the moment.
         </div>
       ) : (
-        <div className="grid grid-cols-1 gap-6 px-4 sm:grid-cols-2 md:px-16 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-6 px-4 sm:grid-cols-3 md:px-16 lg:grid-cols-4">
           {doctors.map((doctor) => (
             <Link key={doctor.id} to={`/${doctor.id}`}>
               <DoctorCard
-                image={doctor.image}
-                isAvailable={doctor.isAvailable}
+                image={doctor.image.url}
+                isAvailable={doctor.availability.length > 2 ? true : false}
                 name={doctor.name}
                 apartment={doctor.specialization}
+                experience={doctor.experience}
               />
             </Link>
           ))}

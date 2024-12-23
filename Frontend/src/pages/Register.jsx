@@ -2,32 +2,45 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { registerUser, clearError } from "@/rtk/slices/usersSlice";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import { data } from "autoprefixer";
 
 const Register = () => {
   const dispatch = useDispatch();
-  const { error, loading } = useSelector((state) => state.users);
   const navigate = useNavigate();
+  const { error, loading } = useSelector((state) => state.users);
   const [formData, setFormData] = useState({
-    name: "",
+    userName: "",
     email: "",
     password: "",
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    setFormData((prev) => ({
+      ...prev,
+      [name === "name" ? "userName" : name]: value,
+    }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.email || !formData.password) {
+    if (!formData.userName || !formData.email || !formData.password) {
       dispatch(clearError());
       return;
     }
 
-    dispatch(registerUser(formData));
-    navigate("/");
+    dispatch(registerUser(formData))
+      .unwrap()
+      .then((data) => {
+        toast.success(data.message);
+        navigate("/login");
+      })
+      .catch((error) => {
+        console.error("Registration failed:", error);
+      });
   };
 
   return (
@@ -55,7 +68,7 @@ const Register = () => {
               type="text"
               name="name"
               id="name"
-              value={formData.name}
+              value={formData.userName}
               onChange={handleChange}
               className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
               placeholder="Enter your name"
@@ -101,7 +114,7 @@ const Register = () => {
           <button
             type="submit"
             className="w-full rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            disabled={loading} // Disable the button when loading
+            disabled={loading}
           >
             {loading ? "Registering..." : "Create Account"}
           </button>

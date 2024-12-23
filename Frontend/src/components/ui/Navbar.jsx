@@ -1,13 +1,15 @@
-import * as React from "react";
-import { Heart, Menu, ShoppingCart } from "lucide-react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Menu, X } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "./button";
+import { useDispatch, useSelector } from "react-redux";
+import { clearUser } from "@/rtk/slices/usersSlice";
 
 export default function Navbar() {
-  const [state, setState] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.users.user);
 
   const menus = [
     { title: "Home", path: "/" },
@@ -16,87 +18,73 @@ export default function Navbar() {
     { title: "Contact", path: "/contact" },
   ];
 
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(min-width: 1024px)");
-
-    const handleResize = () => {
-      if (mediaQuery.matches) {
-        setState(true);
-      } else {
-        setState(false);
-      }
-    };
-
-    handleResize();
-    mediaQuery.addEventListener("change", handleResize);
-
-    return () => mediaQuery.removeEventListener("change", handleResize);
-  }, []);
-
-  useEffect(() => {
-    const user = localStorage.getItem("user");
-    if (user) {
-      setIsLoggedIn(true);
-    }
-  }, []);
-
   const handleLogout = () => {
     localStorage.removeItem("user");
-    setIsLoggedIn(false);
+    dispatch(clearUser());
     navigate("/");
   };
 
+  useEffect(() => {
+    const updateMenuState = () => setMenuOpen(window.innerWidth >= 1024);
+    updateMenuState();
+    window.addEventListener("resize", updateMenuState);
+    return () => window.removeEventListener("resize", updateMenuState);
+  }, []);
+
   return (
-    <nav className={`w-full border-b bg-white p-2 shadow min-[820px]:border-0`}>
-      <div className="mx-auto max-w-screen-xl items-center px-4 min-[820px]:flex min-[820px]:px-8">
-        <div className="flex items-center justify-between py-3 min-[820px]:block min-[820px]:py-5">
-          <Link to="/">
-            <h1 className="text-3xl font-bold text-blue-700">Prescripto</h1>
-          </Link>
-          <div className="min-[820px]:hidden">
-            <button
-              className="rounded-md p-2 text-gray-700 outline-none focus:border focus:border-gray-400"
-              onClick={() => setState(!state)}
-            >
-              <Menu />
-            </button>
-          </div>
-        </div>
+    <nav className="bg-white shadow-lg">
+      <div className="container mx-auto flex items-center justify-between px-6 py-4 lg:px-8">
+        <Link
+          to="/"
+          className="text-2xl font-extrabold tracking-wide text-blue-700"
+        >
+          Prescripto
+        </Link>
+
+        <button
+          className="p-2 text-gray-700 focus:outline-none focus:ring focus:ring-blue-300 lg:hidden"
+          aria-label="Toggle Menu"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? <X /> : <Menu />}
+        </button>
+
         <div
-          className={`mt-8 flex-1 justify-self-center pb-3 md:mt-0 min-[820px]:block min-[820px]:pb-0 ${
-            state ? "block" : "hidden"
+          className={`fixed inset-0 z-40 flex flex-col items-center justify-center bg-white text-center transition-transform duration-300 ease-in-out lg:static lg:flex lg:flex-row lg:space-x-8 lg:bg-transparent lg:text-left ${
+            menuOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
           }`}
         >
-          <ul className="items-center justify-center space-y-8 min-[820px]:flex min-[820px]:space-x-6 min-[820px]:space-y-0">
-            {menus.map((item, idx) => (
-              <li key={idx} className="text-gray-600 hover:text-indigo-600">
-                <Link to={item.path}>{item.title}</Link>
+          <ul className="flex flex-col space-y-6 lg:flex-row lg:space-x-8 lg:space-y-0">
+            {menus.map((menu, idx) => (
+              <li key={idx}>
+                <Link
+                  to={menu.path}
+                  className="text-lg font-medium text-gray-700 transition hover:text-blue-600"
+                  onClick={() => setMenuOpen(false)} // Close menu on mobile
+                >
+                  {menu.title}
+                </Link>
               </li>
             ))}
           </ul>
+
+          <div className="mt-6 lg:ml-8 lg:mt-0">
+            {user ? (
+              <Button
+                className="bg-red-600 px-6 py-2 text-white hover:bg-red-500 focus:ring focus:ring-red-300"
+                onClick={handleLogout}
+              >
+                Logout
+              </Button>
+            ) : (
+              <Link to="/register">
+                <Button className="bg-blue-700 px-6 py-2 text-white hover:bg-blue-500 focus:ring focus:ring-blue-300">
+                  Create Account
+                </Button>
+              </Link>
+            )}
+          </div>
         </div>
-        <div className="hidden min-[820px]:block">
-          {isLoggedIn ? (
-            <Button
-              className="bg-red-600 px-6 py-2 text-white hover:bg-red-500"
-              onClick={handleLogout}
-            >
-              Logout
-            </Button>
-          ) : (
-            <Button className="bg-blue-700 px-6 py-2 text-white hover:bg-blue-500">
-              <Link to="/register">Create Account</Link>
-            </Button>
-          )}
-        </div>
-        {state && (
-          <Button
-            className="mt-6 bg-blue-700 px-6 py-2 text-white hover:bg-blue-500 min-[820px]:hidden"
-            onClick={isLoggedIn ? handleLogout : null}
-          >
-            {isLoggedIn ? "Logout" : "Create Account"}
-          </Button>
-        )}
       </div>
     </nav>
   );

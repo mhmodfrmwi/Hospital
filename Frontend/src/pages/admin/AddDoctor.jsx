@@ -1,17 +1,32 @@
 import { addDoctor } from "@/rtk/slices/doctorsSlice";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const AddDoctor = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [doctorData, setDoctorData] = useState({
     name: "",
-    specialty: "",
-    image: "",
-    contact: "",
+    specialization: "",
+    experience: "",
+    email: "",
+    phone: "",
+    availability: [],
   });
 
   const [error, setError] = useState("");
+
+  const daysOfWeek = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -21,32 +36,54 @@ const AddDoctor = () => {
     });
   };
 
+  const handleAvailabilityChange = (e) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setDoctorData((prev) => ({
+        ...prev,
+        availability: [...prev.availability, value],
+      }));
+    } else {
+      setDoctorData((prev) => ({
+        ...prev,
+        availability: prev.availability.filter((day) => day !== value),
+      }));
+    }
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Validate form data
     if (
       !doctorData.name ||
-      !doctorData.specialty ||
-      !doctorData.image ||
-      !doctorData.contact
+      !doctorData.specialization ||
+      !doctorData.experience ||
+      !doctorData.email ||
+      !doctorData.phone
     ) {
-      setError("All fields are required.");
+      setError("All fields except availability are required.");
       return;
     }
 
-    // Reset error message
     setError("");
 
-    // Dispatch the addDoctor action
-    dispatch(addDoctor(doctorData));
+    dispatch(addDoctor(doctorData))
+      .unwrap()
+      .then((data) => {
+        toast.success(data.message);
+        navigate("/admin");
+      })
+      .catch((error) => {
+        console.error("Registration failed:", error);
+      });
 
-    // Clear form after submission
     setDoctorData({
       name: "",
-      specialty: "",
-      image: "",
-      contact: "",
+      specialization: "",
+      experience: "",
+      email: "",
+      phone: "",
+      availability: [],
     });
   };
 
@@ -76,44 +113,80 @@ const AddDoctor = () => {
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Specialty
+              Specialization
             </label>
             <input
               type="text"
-              name="specialty"
-              value={doctorData.specialty}
+              name="specialization"
+              value={doctorData.specialization}
               onChange={handleInputChange}
               className="mt-1 w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Doctor's Specialty"
+              placeholder="Doctor's Specialization"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Image URL
+              Experience
             </label>
             <input
               type="text"
-              name="image"
-              value={doctorData.image}
+              name="experience"
+              value={doctorData.experience}
               onChange={handleInputChange}
               className="mt-1 w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Image URL (Optional)"
+              placeholder="Years of Experience"
             />
           </div>
 
           <div>
             <label className="block text-sm font-medium text-gray-700">
-              Contact
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              value={doctorData.email}
+              onChange={handleInputChange}
+              className="mt-1 w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Doctor's Email"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Phone
             </label>
             <input
               type="text"
-              name="contact"
-              value={doctorData.contact}
+              name="phone"
+              value={doctorData.phone}
               onChange={handleInputChange}
               className="mt-1 w-full rounded-lg border border-gray-300 p-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Contact Information"
+              placeholder="Doctor's Phone"
             />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Availability
+            </label>
+            <div className="mt-2 grid grid-cols-2 gap-2">
+              {daysOfWeek.map((day) => (
+                <div key={day}>
+                  <label className="flex items-center">
+                    <input
+                      type="checkbox"
+                      value={day}
+                      checked={doctorData.availability.includes(day)}
+                      onChange={handleAvailabilityChange}
+                      className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    />
+                    <span className="ml-2 text-sm text-gray-700">{day}</span>
+                  </label>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="mt-6">

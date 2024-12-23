@@ -3,6 +3,7 @@ import dashBoardIcon from "../../../assets/icons/dashboard-icon.svg";
 import AppointmentsIcon from "../../../assets/icons/appointment-icon.svg";
 import addDoctorIcon from "../../../assets/icons/add-doctor-icon.svg";
 import allDoctorsIcon from "../../../assets/icons/doctor-icon.svg";
+
 const AdminSide = () => {
   const location = useLocation();
 
@@ -30,7 +31,7 @@ const AdminSide = () => {
   ];
 
   return (
-    <div className="min-h-screen w-64 bg-white text-gray-800">
+    <div className="hidden min-h-screen w-0 bg-white text-gray-800 transition-all duration-500 ease-in-out lg:block lg:w-72">
       <div className="mt-6 space-y-4">
         {menuItems.map((item, idx) => {
           const isActive = location.pathname === item.link;
@@ -43,7 +44,9 @@ const AdminSide = () => {
               >
                 <img src={item.icon} alt={item.label} className="h-6 w-6" />
                 <h1
-                  className={`text-lg font-medium ${isActive ? "text-blue-600" : "text-gray-800"}`}
+                  className={`text-lg font-medium ${
+                    isActive ? "text-blue-600" : "text-gray-800"
+                  }`}
                 >
                   {item.label}
                 </h1>

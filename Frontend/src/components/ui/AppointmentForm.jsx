@@ -1,6 +1,8 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { createAppointment } from "@/rtk/slices/appointmentSlice";
+import { fetchDoctors } from "@/rtk/slices/doctorsSlice";
+import { toast } from "react-toastify";
 
 const CreateAppointmentForm = () => {
   const [formData, setFormData] = useState({
@@ -15,11 +17,15 @@ const CreateAppointmentForm = () => {
   const [error, setError] = useState("");
   const dispatch = useDispatch();
 
+  const { doctors, loading } = useSelector((state) => state.doctors);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
+  useEffect(() => {
+    dispatch(fetchDoctors());
+  }, [dispatch]);
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -34,23 +40,22 @@ const CreateAppointmentForm = () => {
       return;
     }
 
-    // Dispatch the createAppointment action to Redux
     dispatch(createAppointment(formData))
       .unwrap()
-      .then(() => {
-        setError(""); // Clear any errors
-        alert("Appointment created successfully!");
+      .then((data) => {
+        setError("");
+        toast.success(data.message);
         setFormData({
           doctorName: "",
           patientName: "",
           date: "",
           time: "",
           reason: "",
-          status: "Pending", // Reset to default status
+          status: "Pending",
         });
       })
       .catch((err) => {
-        setError(err.message); // Set error if appointment creation fails
+        setError(err.message);
       });
   };
 
@@ -73,15 +78,22 @@ const CreateAppointmentForm = () => {
             >
               Doctor Name
             </label>
-            <input
-              type="text"
+            <select
               name="doctorName"
               id="doctorName"
               value={formData.doctorName}
               onChange={handleChange}
               className="mt-1 w-full rounded-lg border border-gray-300 px-4 py-2 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              placeholder="Enter doctor's name"
-            />
+            >
+              <option value="" disabled>
+                Select a doctor
+              </option>
+              {doctors.map((doctor) => (
+                <option key={doctor.id} value={doctor.name}>
+                  {doctor.name}
+                </option>
+              ))}
+            </select>
           </div>
 
           <div className="mb-4">

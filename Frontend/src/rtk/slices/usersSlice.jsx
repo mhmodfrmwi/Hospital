@@ -1,52 +1,71 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-// Async thunk for user registration (already defined)
 export const registerUser = createAsyncThunk(
   "users/registerUser",
   async (userData, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:3000/users", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `http://localhost:4000/api/rest/authRoute/register`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(userData),
         },
-        body: JSON.stringify(userData),
-      });
+      );
 
       if (!response.ok) {
-        throw new Error("Registration failed!");
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Registration failed!");
       }
 
-      const data = await response.json();
-      return data;
+      const contentType = response.headers.get("content-type");
+      if (contentType && contentType.includes("application/json")) {
+        const data = await response.json();
+        return data;
+      } else {
+        throw new Error("Unexpected response format");
+      }
     } catch (error) {
       return rejectWithValue(error.message);
     }
   },
 );
 
-// Async thunk for user login
 export const loginUser = createAsyncThunk(
   "users/loginUser",
   async (credentials, { rejectWithValue }) => {
     try {
       const response = await fetch(
-        "http://localhost:3000/users?email=" +
-          credentials.email +
-          "&password=" +
-          credentials.password,
+        "http://localhost:4000/api/rest/authRoute/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(credentials),
+        },
       );
 
       if (!response.ok) {
-        throw new Error("Login failed! Invalid credentials.");
+        const errorData = await response.json();
+        throw new Error(
+          errorData.message || "Login failed! Invalid credentials.",
+        );
       }
 
       const data = await response.json();
-      if (data.length === 0) {
-        throw new Error("Login failed! User not found.");
-      }
-
-      return data[0]; // Assuming you only get one user back
+      return {
+        user: {
+          id: data.user.id,
+          userName: data.user.userName,
+          email: data.user.email,
+          profilePhoto: data.user.profilePhoto,
+          isAdmin: data.user.isAdmin,
+        },
+        token: data.token,
+      };
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -56,7 +75,9 @@ export const loginUser = createAsyncThunk(
 const usersSlice = createSlice({
   name: "users",
   initialState: {
-    user: null,
+    user: localStorage.getItem("user")
+      ? JSON.parse(localStorage.getItem("user"))
+      : null,
     loading: false,
     error: null,
   },
@@ -77,6 +98,7 @@ const usersSlice = createSlice({
       .addCase(registerUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
+        localStorage.setItem("user", JSON.stringify(action.payload));
       })
       .addCase(registerUser.rejected, (state, action) => {
         state.loading = false;
@@ -89,6 +111,7 @@ const usersSlice = createSlice({
       .addCase(loginUser.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
+        localStorage.setItem("user", JSON.stringify(action.payload));
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;
@@ -96,7 +119,6 @@ const usersSlice = createSlice({
       });
   },
 });
-
 export const { clearError, clearUser } = usersSlice.actions;
 
 export default usersSlice.reducer;

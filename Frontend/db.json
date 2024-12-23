@@ -1,7 +1,7 @@
 {
   "appointments": [
     {
-      "id": 1,
+      "id": "1",
       "doctorName": "Dr. John Doe",
       "patientName": "Jane Smith",
       "date": "2024-12-26",
@@ -10,7 +10,7 @@
       "status": "Confirmed"
     },
     {
-      "id": 2,
+      "id": "2",
       "doctorName": "Dr. Emily Carter",
       "patientName": "Tom Hanks",
       "date": "2024-12-27",
@@ -19,7 +19,7 @@
       "status": "Pending"
     },
     {
-      "id": 3,
+      "id": "3",
       "doctorName": "Dr. Michael Brown",
       "patientName": "Sarah Johnson",
       "date": "2024-12-28",
@@ -28,7 +28,7 @@
       "status": "Cancelled"
     },
     {
-      "id": 4,
+      "id": "4",
       "doctorName": "Dr. Olivia Williams",
       "patientName": "Chris Evans",
       "date": "2024-12-29",
@@ -37,7 +37,7 @@
       "status": "Confirmed"
     },
     {
-      "id": 5,
+      "id": "5",
       "doctorName": "Dr. Emma Davis",
       "patientName": "Laura Wilson",
       "date": "2024-12-30",
@@ -46,7 +46,7 @@
       "status": "Pending"
     },
     {
-      "id": 6,
+      "id": "6",
       "doctorName": "Dr. James Miller",
       "patientName": "Mark Lee",
       "date": "2025-01-02",
@@ -55,7 +55,7 @@
       "status": "Confirmed"
     },
     {
-      "id": 7,
+      "id": "7",
       "doctorName": "Dr. Sophia Taylor",
       "patientName": "Emily Clark",
       "date": "2025-01-03",
@@ -64,7 +64,7 @@
       "status": "Cancelled"
     },
     {
-      "id": 8,
+      "id": "8",
       "doctorName": "Dr. Henry Wilson",
       "patientName": "Oliver Martinez",
       "date": "2025-01-04",
@@ -73,7 +73,7 @@
       "status": "Pending"
     },
     {
-      "id": 9,
+      "id": "9",
       "doctorName": "Dr. Mia Anderson",
       "patientName": "Sophia Hernandez",
       "date": "2025-01-05",
@@ -82,7 +82,7 @@
       "status": "Confirmed"
     },
     {
-      "id": 10,
+      "id": "10",
       "doctorName": "Dr. William Garcia",
       "patientName": "Liam Moore",
       "date": "2025-01-06",
@@ -105,125 +105,102 @@
       "time": "13:56",
       "reason": "having a panic attack",
       "status": "Pending"
+    },
+    {
+      "id": "ecba",
+      "doctorName": "Dr. James Brown",
+      "patientName": "ahmed mohamed",
+      "date": "2024-12-17",
+      "time": "03:53",
+      "reason": "having a panic attack",
+      "status": "Pending"
     }
   ],
   "doctors": [
     {
-      "id": 1,
+      "id": "1",
       "name": "Dr. Sarah Johnson",
       "specialization": "Cardiologist",
       "experience": "10 years",
       "email": "sarah.johnson@example.com",
       "phone": "+1 555-123-4567",
       "image": "https://via.placeholder.com/150",
-      "availability": [
-        "Monday",
-        "Wednesday",
-        "Friday"
-      ]
+      "availability": ["Monday", "Wednesday", "Friday"]
     },
     {
-      "id": 2,
+      "id": "2",
       "name": "Dr. Michael Smith",
       "specialization": "Orthopedic Surgeon",
       "experience": "8 years",
       "email": "michael.smith@example.com",
       "phone": "+1 555-987-6543",
       "image": "https://via.placeholder.com/150",
-      "availability": [
-        "Tuesday",
-        "Thursday",
-        "Saturday"
-      ]
+      "availability": ["Tuesday", "Thursday", "Saturday"]
     },
     {
-      "id": 3,
+      "id": "3",
       "name": "Dr. Emily Davis",
       "specialization": "Dermatologist",
       "experience": "6 years",
       "email": "emily.davis@example.com",
       "phone": "+1 555-456-7890",
       "image": "https://via.placeholder.com/150",
-      "availability": [
-        "Monday",
-        "Tuesday",
-        "Friday"
-      ]
+      "availability": ["Monday", "Tuesday", "Friday"]
     },
     {
-      "id": 4,
+      "id": "4",
       "name": "Dr. James Brown",
       "specialization": "Neurologist",
       "experience": "12 years",
       "email": "james.brown@example.com",
       "phone": "+1 555-321-6548",
       "image": "https://via.placeholder.com/150",
-      "availability": [
-        "Wednesday",
-        "Thursday",
-        "Saturday"
-      ]
+      "availability": ["Wednesday", "Thursday", "Saturday"]
     },
     {
-      "id": 5,
+      "id": "5",
       "name": "Dr. Olivia Wilson",
       "specialization": "Pediatrician",
       "experience": "5 years",
       "email": "olivia.wilson@example.com",
       "phone": "+1 555-654-3219",
       "image": "https://via.placeholder.com/150",
-      "availability": [
-        "Monday",
-        "Thursday",
-        "Friday"
-      ]
+      "availability": ["Monday", "Thursday", "Friday"]
     },
     {
-      "id": 6,
+      "id": "6",
       "name": "Dr. Ethan Garcia",
       "specialization": "General Practitioner",
       "experience": "7 years",
       "email": "ethan.garcia@example.com",
       "phone": "+1 555-789-1234",
       "image": "https://via.placeholder.com/150",
-      "availability": [
-        "Monday",
-        "Wednesday",
-        "Saturday"
-      ]
+      "availability": ["Monday", "Wednesday", "Saturday"]
     },
     {
-      "id": 7,
+      "id": "7",
       "name": "Dr. Sophia Martinez",
       "specialization": "Gynecologist",
       "experience": "9 years",
       "email": "sophia.martinez@example.com",
       "phone": "+1 555-123-7896",
       "image": "https://via.placeholder.com/150",
-      "availability": [
-        "Tuesday",
-        "Friday",
-        "Saturday"
-      ]
+      "availability": ["Tuesday", "Friday", "Saturday"]
     },
     {
-      "id": 8,
+      "id": "8",
       "name": "Dr. Liam Rodriguez",
       "specialization": "Oncologist",
       "experience": "15 years",
       "email": "liam.rodriguez@example.com",
       "phone": "+1 555-987-3214",
       "image": "https://via.placeholder.com/150",
-      "availability": [
-        "Monday",
-        "Wednesday",
-        "Thursday"
-      ]
+      "availability": ["Monday", "Wednesday", "Thursday"]
     },
     {
       "id": "0162",
       "name": "Mahmoud Elframawi",
-      "specialty": "children",
+      "specialization": "children",
       "image": "https://scontent.fcai20-2.fna.fbcdn.net/v/t39.30808-6/470049166_1118968062906674_9032075079816286947_n.jpg?_nc_cat=104&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeGIKdkThKSOk6_Mw1t4NSY-RPOZ5hQIxIhE85nmFAjEiDswAMN1DxXSawlWSJQYCjiLlHXVfJ3GHkswGzjwtI_t&_nc_ohc=vmveQJN4k8kQ7kNvgGoVfhv&_nc_oc=AdgIcaEvDrd8YXb-Rx6ON3qkPUJHhJHRjq2l9bUH6kqFMr3zj4DY8kdKXsD-YFLYpGw&_nc_zt=23&_nc_ht=scontent.fcai20-2.fna&_nc_gid=AuxMFbBl_hhCQ0w27uKVJ9l&oh=00_AYCGti2m7orLHNlysQ79VZ_8Kvevd4iDj0YbOP5iv_vwbA&oe=676EE04C",
       "contact": "01016345829"
     }

@@ -2,6 +2,7 @@ import { loginUser } from "@/rtk/slices/usersSlice";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -31,12 +32,9 @@ const Login = () => {
       .unwrap()
       .then((userData) => {
         setError("");
-        alert("Login successful!");
-
+        toast.success("Login successful.");
         localStorage.setItem("user", JSON.stringify(userData));
-
         navigate("/");
-        window.location.reload();
       })
       .catch((error) => {
         setError(error);
@@ -92,7 +90,7 @@ const Login = () => {
           <button
             type="submit"
             className="w-full rounded-lg bg-blue-600 px-4 py-2 text-white hover:bg-blue-500 focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-            disabled={loading} // Disable the button while loading
+            disabled={loading}
           >
             {loading ? "Logging in..." : "Log In"}
           </button>
